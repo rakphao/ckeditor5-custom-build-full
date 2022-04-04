@@ -16,13 +16,14 @@ export class IndentTextEditing extends Plugin {
         const indentMeasure = (options && options.indentMeasure) ? options.indentMeasure : INDENT_TEXT_DEFAULT_MEASURE;
 
         schema.extend('$block', {allowAttributes: INDENT_TEXT_ATTRIBUTE});
+		editor.model.schema.setAttributeProperties( INDENT_TEXT_ATTRIBUTE, { isFormatting: true } );
 
         editor.conversion.for('downcast').attributeToAttribute({
             model: INDENT_TEXT_ATTRIBUTE,
             view: modelAttributeValue => ({
                 key: 'style',
                 value: {
-                    'padding-left': `${modelAttributeValue}${indentMeasure}`,
+                    'text-indent': `${modelAttributeValue}${indentMeasure}`,
                 },
             })
         });
@@ -30,13 +31,13 @@ export class IndentTextEditing extends Plugin {
         editor.conversion.for('upcast').attributeToAttribute({
             view: {
                 key: 'style',
-                value: /padding-left-[\S]+/,
+                value: /text-indent[\S]+/,
             },
             model: {
                 key: INDENT_TEXT_ATTRIBUTE,
                 value: viewElement => {
-                    if (viewElement.getStyle('padding-left')) {
-                        return parseInt(viewElement.getStyle('padding-left'));
+                    if (viewElement.getStyle('text-indent')) {
+                        return parseInt(viewElement.getStyle('text-indent'));
                     }
                 },
             },

@@ -1,7 +1,7 @@
 import Plugin from "@ckeditor/ckeditor5-core/src/plugin";
 import ButtonView from "@ckeditor/ckeditor5-ui/src/button/buttonview";
-import indentLeft from "../theme/icons/left-indent-text-editor-svgrepo-com.svg";
-import indentRight from "../theme/icons/right-indent-text-editor-svgrepo-com.svg";
+import indentLeft from "../theme/icons/IndentTextLeft.svg";
+import indentRight from "../theme/icons/IndentTextRight.svg";
 import {INDENT_TEXT_COMMAND, INDENT_TEXT_DEFAULT_VALUE} from "./constants";
 
 /**
@@ -15,6 +15,10 @@ export class IndentTextUi extends Plugin {
         const editor = this.editor;
         const options = editor.config.get('indentText.options');
         const indentLength = (options && options.indentLength) ? options.indentLength : INDENT_TEXT_DEFAULT_VALUE;
+		const schema = editor.model.schema;
+
+		//schema.extend( '$block', { allowAttributes: 'alignment' } );
+		//editor.model.schema.setAttributeProperties( 'alignment', { isFormatting: true } );
 
         editor.ui.componentFactory.add('indentLeft', locale => {
             const view = new ButtonView(locale);
