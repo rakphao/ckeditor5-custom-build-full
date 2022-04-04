@@ -16,7 +16,7 @@ export class IndentTextEditing extends Plugin {
         const indentMeasure = (options && options.indentMeasure) ? options.indentMeasure : INDENT_TEXT_DEFAULT_MEASURE;
 
         schema.extend('$block', {allowAttributes: INDENT_TEXT_ATTRIBUTE});
-		editor.model.schema.setAttributeProperties( INDENT_TEXT_ATTRIBUTE, { isFormatting: true } );
+        editor.model.schema.setAttributeProperties( INDENT_TEXT_ATTRIBUTE, { isFormatting: true } );
 
         editor.conversion.for('downcast').attributeToAttribute({
             model: INDENT_TEXT_ATTRIBUTE,
@@ -28,20 +28,25 @@ export class IndentTextEditing extends Plugin {
             })
         });
 
-        editor.conversion.for('upcast').attributeToAttribute({
-            view: {
-                key: 'style',
-                value: /text-indent[\S]+/,
-            },
-            model: {
-                key: INDENT_TEXT_ATTRIBUTE,
-                value: viewElement => {
-                    if (viewElement.getStyle('text-indent')) {
-                        return parseInt(viewElement.getStyle('text-indent'));
+        editor.conversion.for('upcast').attributeToAttribute(
+            {
+                view: {
+                    styles: {
+                        'text-indent': /[\s\S]+/
                     }
                 },
-            },
-        });
+                model: {
+                    key: INDENT_TEXT_ATTRIBUTE,
+                    value: viewElement => {
+                        if (viewElement.getStyle('text-indent')) {
+                            return parseFloat(viewElement.getStyle('text-indent'));
+                        }
+                    },
+                },
+
+            });
+
+
 
         editor.commands.add(INDENT_TEXT_COMMAND, new IndentTextCommand(editor));
     }
